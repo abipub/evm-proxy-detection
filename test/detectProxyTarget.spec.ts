@@ -58,6 +58,25 @@ describe('detectProxyTarget', () => {
     ).toBe('0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F')
   })
 
+  it('detects EIP-1167 minimal proxies', async () => {
+    expect(
+      await detectProxyTarget(
+        '0x8e9C78E261C3b6DA8221b8e462E71B7da871dADb',
+        mainnetProvider,
+        BLOCK_TAG
+      )
+    ).toBe('0x2F5E324EC0E2Fd9925165c66e0DAAde39837ADb5')
+
+    // works also for optimized proxies to vanity addresses
+    expect(
+      await detectProxyTarget(
+        '0xa81043fd06D57D140f6ad8C2913DbE87fdecDd5F',
+        mainnetProvider,
+        BLOCK_TAG
+      )
+    ).toBe('0x0000000010Fd301be3200e67978E3CC67C962f48')
+  })
+
   it('detects Gnosis Safe proxies', async () => {
     expect(
       await detectProxyTarget(

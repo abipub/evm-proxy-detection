@@ -2,6 +2,7 @@ import { Interface } from '@ethersproject/abi'
 import { BlockTag, Provider } from '@ethersproject/abstract-provider'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
+import { hexZeroPad } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 
 // obtained as bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1)
@@ -94,7 +95,7 @@ const readAddress = (value: string) => {
   if (number.isZero()) {
     throw new Error('empty slot')
   }
-  return getAddress(number.toHexString())
+  return getAddress(hexZeroPad(number.toHexString(), 20))
 }
 
 const EIP_1167_BYTECODE_PREFIX = '363d3d373d3d3d363d'
@@ -112,6 +113,7 @@ const parse1167Bytecode = (bytecode: string) => {
   const pushNHex = bytecode.substring(prefix.length, prefix.length + 2)
   // push1 ... push20 use opcodes 0x60 ... 0x73
   const addressLength = parseInt(pushNHex, 16) - 0x5f
+
   if (addressLength < 1 || addressLength > 20) {
     throw new Error('Not an EIP-1167 bytecode')
   }
@@ -119,7 +121,7 @@ const parse1167Bytecode = (bytecode: string) => {
   // extract address
   return `0x${bytecode.substring(
     prefix.length + 2,
-    prefix.length + 2 + addressLength
+    prefix.length + 2 + addressLength * 2 // address length is in bytes, 2 hex chars make up 1 byte
   )}`
 }
 

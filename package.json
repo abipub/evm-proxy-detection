@@ -51,6 +51,7 @@
     "@ethersproject/abstract-provider": "^5.0.0",
     "@ethersproject/address": "^5.0.0",
     "@ethersproject/bignumber": "^5.0.0",
+    "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/contracts": "^5.0.0"
   }
 }
