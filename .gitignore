@@ -1,0 +1,9 @@
+build
+node_modules
+coverage
+cache
+artifacts
+typechain
+.env
+
+*.log

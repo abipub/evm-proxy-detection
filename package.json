@@ -1,0 +1,56 @@
+{
+  "name": "ethers-proxies",
+  "version": "1.0.0",
+  "description": "Detect proxy contracts and their target addresses using ethers",
+  "repository": "git@github.com:gnosis/ethers-proxies.git",
+  "author": "Jan-Felix <jan-felix.schwarz@gnosis.io>",
+  "license": "MIT",
+  "main": "build/cjs/index.js",
+  "typings": "build/cjs/index.d.ts",
+  "module": "build/esm/index.js",
+  "files": [
+    "build",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "prepare": "yarn build",
+    "prebuild": "rimraf build",
+    "build": "yarn build:cjs && yarn build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "check": "yarn check:prettier && yarn check:lint && yarn check:spelling",
+    "check:lint": "eslint src test --ext .ts",
+    "check:prettier": "prettier \"src/**/*.ts\" --list-different",
+    "check:spelling": "cspell \"**\"",
+    "fix": "yarn fix:prettier && yarn fix:lint",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "fix:lint": "eslint src --ext .ts --fix",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@ethersproject/providers": "^5.5.1",
+    "@types/jest": "^27.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
+    "cspell": "^5.10.1",
+    "env-cmd": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.24.2",
+    "jest": "^27.4.5",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@ethersproject/abi": "^5.5.0",
+    "@ethersproject/abstract-provider": "^5.5.1",
+    "@ethersproject/address": "^5.5.0",
+    "@ethersproject/bignumber": "^5.5.0",
+    "@ethersproject/contracts": "^5.5.0"
+  }
+}

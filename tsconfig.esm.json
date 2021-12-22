@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "target": "esnext",
+    "outDir": "build/esm",
+    "module": "esnext"
+  },
+  "include": ["src/**/*.ts"]
+}

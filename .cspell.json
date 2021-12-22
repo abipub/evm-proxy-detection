@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
+  "language": "en",
+  "words": [
+    "bignumber",
+    "ethersproject",
+    "keccak",
+    "PROXIABLE",
+    "zeppelinos"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "package.json",
+    "yarn.lock",
+    "tsconfig.json",
+    "node_modules/**",
+    "build/**"
+  ]
+}
