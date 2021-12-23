@@ -51,11 +51,11 @@ describe('detectProxyTarget', () => {
   it('detects EIP-897 delegate proxies', async () => {
     expect(
       await detectProxyTarget(
-        '0x0DA0C3e52C977Ed3cBc641fF02DD271c3ED55aFe',
+        '0x8260b9eC6d472a34AD081297794d7Cc00181360a',
         mainnetProvider,
         BLOCK_TAG
       )
-    ).toBe('0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F')
+    ).toBe('0xe4E4003afE3765Aca8149a82fc064C0b125B9e5a')
   })
 
   it('detects EIP-1167 minimal proxies', async () => {
