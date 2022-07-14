@@ -1,4 +1,4 @@
-# evm-proxies
+# evm-proxy-detection
 
 Detect proxy contracts and their target addresses using an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible JSON-RPC `request` function
 
@@ -17,13 +17,13 @@ It detects the following kinds of proxies:
 This module is distributed via npm. For adding it to your project, run:
 
 ```
-npm install --save evm-proxies
+npm install --save evm-proxy-detection
 ```
 
 To install it using yarn, run:
 
 ```
-yarn add evm-proxies
+yarn add evm-proxy-detection
 ```
 
 ## How to use
@@ -36,7 +36,7 @@ The promise resolves to `null` if no proxy can be detected.
 
 ```ts
 import { InfuraProvider } from '@ethersproject/providers'
-import { detectProxyTarget, EIP1193ProviderRequestFunc } from 'evm-proxies'
+import { detectProxyTarget, EIP1193ProviderRequestFunc } from 'evm-proxy-detection'
 
 const infuraProvider = new InfuraProvider(1, process.env.INFURA_API_KEY)
 const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) =>
@@ -56,7 +56,7 @@ Otherwise, you can use providers like [eip1193-provider](https://www.npmjs.com/p
 
 ```ts
 import Web3 from 'web3'
-import { detectProxyTarget } from 'evm-proxies'
+import { detectProxyTarget } from 'evm-proxy-detection'
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545')
 
