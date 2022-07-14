@@ -32,20 +32,6 @@ The function requires an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) com
 It returns a promise that resolves to the proxy target address, i.e., the address of the contract implementing the logic.
 The promise resolves to `null` if no proxy can be detected.
 
-### Ethers with an EIP1193Bridge
-```ts
-import { JsonRpcProvider } from '@ethersproject/providers'
-import { Eip1193Bridge } from "@ethersproject/experimental";
-import detectProxyTarget from 'ethers-proxies'
-
-const provider = new JsonRpcProvider(`http://localhost:8545`)
-const signer = provider.getSigner(0)
-const eip1193Provider = new Eip1193Bridge(signer, provider)
-const requestFunc = eip1193Provider.request.bind(eip1193Provider)
-
-const target = await detectProxyTarget('0xA7AeFeaD2F25972D80516628417ac46b3F2604Af', requestFunc)
-console.log(target)  // logs "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0"
-```
 
 ### Ethers with an adapter function
 ```ts
@@ -81,7 +67,7 @@ detectProxyTarget(address: string, provider: Provider, blockTag?: BlockTag): Pro
 
 **Arguments**
 - `address` (string): The address of the proxy contract
-- `provider` (Provider): An [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible provider instance
+- `jsonRpcRequest` (EIP1193ProviderRequestFunc): A JSON-RPC request function, compatible with [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) (`(method: string, params: any[]) => Promise<any>`)
 - `blockTag` (optional: BlockTag): `"earliest"`, `"latest"`, `"pending"` or hex block number, default is `"latest"`
 
 The function returns a promise that will generally resolve to either the detected target contract address (non-checksummed) or `null` if it couldn't detect one. 
