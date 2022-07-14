@@ -36,7 +36,7 @@ The promise resolves to `null` if no proxy can be detected.
 
 ```ts
 import { InfuraProvider } from '@ethersproject/providers'
-import { detectProxyTarget, EIP1193ProviderRequestFunc } from 'ethers-proxies'
+import { detectProxyTarget, EIP1193ProviderRequestFunc } from 'evm-proxies'
 
 const infuraProvider = new InfuraProvider(1, process.env.INFURA_API_KEY)
 const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) =>
@@ -56,6 +56,7 @@ Otherwise, you can use providers like [eip1193-provider](https://www.npmjs.com/p
 
 ```ts
 import Web3 from 'web3'
+import { detectProxyTarget } from 'evm-proxies'
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545')
 
