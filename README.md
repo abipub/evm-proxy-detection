@@ -70,7 +70,7 @@ console.log(target) // logs "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0"
 ## API
 
 ```ts
-detectProxyTarget(address: string, provider: Provider, blockTag?: BlockTag): Promise<string | null>
+detectProxyTarget(address: string, jsonRpcRequest: EIP1193ProviderRequestFunc, blockTag?: BlockTag): Promise<string | null>
 ```
 
 **Arguments**
