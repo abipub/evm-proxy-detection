@@ -7,7 +7,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
   const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) => infuraProvider.send(method, params)
 
   // TODO fix to a block number to keep test stable for eternity (requires Infura archive access)
-  const BLOCK_TAG = 'latest' // 13848950
+  const BLOCK_TAG = 'latest' // 15573889
 
   it('detects EIP-1967 direct proxies', async () => {
     expect(
@@ -36,7 +36,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
         requestFunc,
         BLOCK_TAG
       )
-    ).toBe('0xe0fbc366b704d0fcbcd752bfdded8382e93700b9')
+    ).toBe('0x36b799160cdc2d9809d108224d1967cc9b7d321c')
   })
 
   it('detects OpenZeppelin proxies', async () => {
