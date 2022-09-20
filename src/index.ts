@@ -1,7 +1,4 @@
-import {
-  BlockTag,
-  EIP1193ProviderRequestFunc,
-} from './types'
+import { BlockTag, EIP1193ProviderRequestFunc } from './types'
 
 // obtained as bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1)
 const EIP_1967_LOGIC_SLOT =
@@ -40,7 +37,7 @@ const GNOSIS_SAFE_PROXY_INTERFACE = [
 const detectProxyTarget = (
   proxyAddress: string,
   jsonRpcRequest: EIP1193ProviderRequestFunc,
-  blockTag?: BlockTag,
+  blockTag?: BlockTag
 ): Promise<string | null> =>
   Promise.any([
     // EIP-1167 Minimal Proxy Contract
@@ -55,8 +52,7 @@ const detectProxyTarget = (
     jsonRpcRequest({
       method: 'eth_getStorageAt',
       params: [proxyAddress, EIP_1967_LOGIC_SLOT, blockTag],
-    })
-      .then(readAddress),
+    }).then(readAddress),
 
     // EIP-1967 beacon proxy
     jsonRpcRequest({
@@ -74,19 +70,18 @@ const detectProxyTarget = (
             },
             blockTag,
           ],
-        })
-          .catch(() =>
-            jsonRpcRequest({
-              method: 'eth_call',
-              params: [
-                {
-                  to: beaconAddress,
-                  data: EIP_1167_BEACON_METHODS[1],
-                },
-                blockTag,
-              ],
-            }),
-          ),
+        }).catch(() =>
+          jsonRpcRequest({
+            method: 'eth_call',
+            params: [
+              {
+                to: beaconAddress,
+                data: EIP_1167_BEACON_METHODS[1],
+              },
+              blockTag,
+            ],
+          })
+        )
       )
       .then(readAddress),
 
@@ -94,15 +89,13 @@ const detectProxyTarget = (
     jsonRpcRequest({
       method: 'eth_getStorageAt',
       params: [proxyAddress, OPEN_ZEPPELIN_IMPLEMENTATION_SLOT, blockTag],
-    })
-      .then(readAddress),
+    }).then(readAddress),
 
     // EIP-1822 Universal Upgradeable Proxy Standard
     jsonRpcRequest({
       method: 'eth_getStorageAt',
       params: [proxyAddress, EIP_1822_LOGIC_SLOT, blockTag],
-    })
-      .then(readAddress),
+    }).then(readAddress),
 
     // EIP-897 DelegateProxy pattern
     jsonRpcRequest({
@@ -134,21 +127,17 @@ const readAddress = (value: unknown): string => {
     throw new Error(`Invalid address value: ${value}`)
   }
 
-  if (value.length === 66) {
-    const EMPTY_SLOT = `0x${'0'.repeat(64)}`
-    if (value === EMPTY_SLOT) {
-      throw new Error('Empty slot')
-    }
-
-    return '0x' + value.slice(-40)
+  let address = value
+  if (address.length === 66) {
+    address = '0x' + address.slice(-40)
   }
 
-  const zeroAddress = `0x{'0'.repeat(40)}`
-  if (value === zeroAddress) {
+  const zeroAddress = '0x' + '0'.repeat(40)
+  if (address === zeroAddress) {
     throw new Error('Empty address')
   }
 
-  return value
+  return address
 }
 
 const EIP_1167_BYTECODE_PREFIX = '0x363d3d373d3d3d363d'
@@ -165,7 +154,7 @@ const parse1167Bytecode = (bytecode: unknown): string => {
   // detect length of address (20 bytes non-optimized, 0 < N < 20 bytes for vanity addresses)
   const pushNHex = bytecode.substring(
     EIP_1167_BYTECODE_PREFIX.length,
-    EIP_1167_BYTECODE_PREFIX.length + 2,
+    EIP_1167_BYTECODE_PREFIX.length + 2
   )
   // push1 ... push20 use opcodes 0x60 ... 0x73
   const addressLength = parseInt(pushNHex, 16) - 0x5f
@@ -176,7 +165,7 @@ const parse1167Bytecode = (bytecode: unknown): string => {
 
   const addressFromBytecode = bytecode.substring(
     EIP_1167_BYTECODE_PREFIX.length + 2,
-    EIP_1167_BYTECODE_PREFIX.length + 2 + addressLength * 2, // address length is in bytes, 2 hex chars make up 1 byte
+    EIP_1167_BYTECODE_PREFIX.length + 2 + addressLength * 2 // address length is in bytes, 2 hex chars make up 1 byte
   )
 
   // padStart is needed for vanity addresses
