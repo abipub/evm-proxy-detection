@@ -37,7 +37,7 @@ const GNOSIS_SAFE_PROXY_INTERFACE = [
 const detectProxyTarget = (
   proxyAddress: string,
   jsonRpcRequest: EIP1193ProviderRequestFunc,
-  blockTag?: BlockTag
+  blockTag: BlockTag = 'latest'
 ): Promise<string | null> =>
   Promise.any([
     // EIP-1167 Minimal Proxy Contract
