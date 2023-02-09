@@ -34,6 +34,11 @@ const GNOSIS_SAFE_PROXY_INTERFACE = [
   '0xa619486e00000000000000000000000000000000000000000000000000000000',
 ]
 
+const COMPTROLLER_PROXY_INTERFACE = [
+  // bytes4(keccak256("comptrollerImplementation()")) padded to 32 bytes
+  '0xbb82aa5e00000000000000000000000000000000000000000000000000000000',
+]
+
 const detectProxyTarget = (
   proxyAddress: string,
   jsonRpcRequest: EIP1193ProviderRequestFunc,
@@ -116,6 +121,18 @@ const detectProxyTarget = (
         {
           to: proxyAddress,
           data: GNOSIS_SAFE_PROXY_INTERFACE[0],
+        },
+        blockTag,
+      ],
+    }).then(readAddress),
+
+    // Comptroller proxy
+    jsonRpcRequest({
+      method: 'eth_call',
+      params: [
+        {
+          to: proxyAddress,
+          data: COMPTROLLER_PROXY_INTERFACE[0],
         },
         blockTag,
       ],

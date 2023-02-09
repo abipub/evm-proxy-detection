@@ -4,7 +4,8 @@ import detectProxyTarget from '../src'
 
 describe('detectProxyTarget -> eip1193 provider', () => {
   const infuraProvider = new InfuraProvider(1, process.env.INFURA_API_KEY)
-  const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) => infuraProvider.send(method, params)
+  const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) =>
+    infuraProvider.send(method, params)
 
   // TODO fix to a block number to keep test stable for eternity (requires Infura archive access)
   const BLOCK_TAG = 'latest' // 15573889
@@ -89,6 +90,16 @@ describe('detectProxyTarget -> eip1193 provider', () => {
         BLOCK_TAG
       )
     ).toBe('0xd9db270c1b5e3bd161e8c8503c55ceabee709552')
+  })
+
+  it("detects Compound's custom proxy", async () => {
+    expect(
+      await detectProxyTarget(
+        '0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B',
+        requestFunc,
+        BLOCK_TAG
+      )
+    ).toBe('0xbafe01ff935c7305907c33bf824352ee5979b526')
   })
 
   it('resolves to null if no proxy target is detected', async () => {
