@@ -60,7 +60,6 @@ describe('detectProxyTarget -> eip1193 provider', () => {
     ).toBe('0xe4e4003afe3765aca8149a82fc064c0b125b9e5a')
   })
 
-  // remove .skip after https://github.com/ethers-io/ethers.js/pull/3166 is merged
   it('detects EIP-1167 minimal proxies', async () => {
     expect(
       await detectProxyTarget(
@@ -71,7 +70,6 @@ describe('detectProxyTarget -> eip1193 provider', () => {
     ).toBe('0x210ff9ced719e9bf2444dbc3670bac99342126fa')
   })
 
-  // remove .skip after https://github.com/ethers-io/ethers.js/pull/3166 is merged
   it('detects EIP-1167 minimal proxies with vanity addresses', async () => {
     expect(
       await detectProxyTarget(

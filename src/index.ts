@@ -159,11 +159,11 @@ const readAddress = (value: unknown): string => {
 
 const EIP_1167_BYTECODE_PREFIX = '0x363d3d373d3d3d363d'
 const EIP_1167_BYTECODE_SUFFIX = '57fd5bf3'
-const parse1167Bytecode = (bytecode: unknown): string => {
+
+export const parse1167Bytecode = (bytecode: unknown): string => {
   if (
     typeof bytecode !== 'string' ||
-    !bytecode.startsWith(EIP_1167_BYTECODE_PREFIX) ||
-    !bytecode.endsWith(EIP_1167_BYTECODE_SUFFIX)
+    !bytecode.startsWith(EIP_1167_BYTECODE_PREFIX)
   ) {
     throw new Error('Not an EIP-1167 bytecode')
   }
@@ -184,6 +184,20 @@ const parse1167Bytecode = (bytecode: unknown): string => {
     EIP_1167_BYTECODE_PREFIX.length + 2,
     EIP_1167_BYTECODE_PREFIX.length + 2 + addressLength * 2 // address length is in bytes, 2 hex chars make up 1 byte
   )
+
+  const SUFFIX_OFFSET_FROM_ADDRESS_END = 22
+  if (
+    !bytecode
+      .substring(
+        EIP_1167_BYTECODE_PREFIX.length +
+          2 +
+          addressLength * 2 +
+          SUFFIX_OFFSET_FROM_ADDRESS_END
+      )
+      .startsWith(EIP_1167_BYTECODE_SUFFIX)
+  ) {
+    throw new Error('Not an EIP-1167 bytecode')
+  }
 
   // padStart is needed for vanity addresses
   return `0x${addressFromBytecode.padStart(40, '0')}`
