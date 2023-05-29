@@ -43,21 +43,21 @@ describe('detectProxyTarget -> eip1193 provider', () => {
   it('detects OpenZeppelin proxies', async () => {
     expect(
       await detectProxyTarget(
-        '0xed7e6720Ac8525Ac1AEee710f08789D02cD87ecB',
+        '0x00fdae9174357424a78afaad98da36fd66dd9e03',
         requestFunc,
         BLOCK_TAG
       )
-    ).toBe('0xe3f3c590e044969294b1730ad8647692faf0f604')
+    ).toBe('0xeb6cb99538bcf417f7a64a4ad81fce9b9714cde8')
   })
 
   it('detects EIP-897 delegate proxies', async () => {
     expect(
       await detectProxyTarget(
-        '0x8260b9eC6d472a34AD081297794d7Cc00181360a',
+        '0xed7e6720Ac8525Ac1AEee710f08789D02cD87ecB',
         requestFunc,
         BLOCK_TAG
       )
-    ).toBe('0xe4e4003afe3765aca8149a82fc064c0b125b9e5a')
+    ).toBe('0xe3f3c590e044969294b1730ad8647692faf0f604')
   })
 
   it('detects EIP-1167 minimal proxies', async () => {
