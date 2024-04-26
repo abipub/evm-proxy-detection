@@ -1,6 +1,6 @@
 # evm-proxy-detection
 
-Detect proxy contracts and their target addresses using an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible JSON-RPC `request` function
+Detect proxy contracts and their target addresses using an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible JSON-RPC `request` function. zero dependencies
 
 This package offers a utility function for checking if a smart contract at a given address implements one of the known proxy patterns.
 It detects the following kinds of proxies:
@@ -10,7 +10,7 @@ It detects the following kinds of proxies:
 - [EIP-897](https://eips.ethereum.org/EIPS/eip-897) Delegate Proxy Pattern
 - [EIP-1822](https://eips.ethereum.org/EIPS/eip-1822) Universal Upgradeable Proxy Standard
 - OpenZeppelin Proxy Pattern
-- Gnosis Safe Proxy Contract
+- Safe Proxy Contract
 
 ## Installation
 
@@ -36,12 +36,12 @@ The promise resolves to `null` if no proxy can be detected.
 
 ```ts
 import { InfuraProvider } from '@ethersproject/providers'
-import detectProxyTarget from 'evm-proxy-detection'
+import detectProxy from 'evm-proxy-detection'
 
 const infuraProvider = new InfuraProvider(1, process.env.INFURA_API_KEY)
 const requestFunc = ({ method, params }) => infuraProvider.send(method, params)
 
-const target = await detectProxyTarget(
+const target = await detectProxy(
   '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
   requestFunc
 )
@@ -55,11 +55,11 @@ Otherwise, you can use providers like [eip1193-provider](https://www.npmjs.com/p
 
 ```ts
 import Web3 from 'web3'
-import detectProxyTarget from 'evm-proxy-detection'
+import detectProxy from 'evm-proxy-detection'
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545')
 
-const target = await detectProxyTarget(
+const target = await detectProxy(
   '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
   web3.currentProvider.request
 )
@@ -69,13 +69,40 @@ console.log(target) // logs "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0"
 ## API
 
 ```ts
-detectProxyTarget(address: string, jsonRpcRequest: EIP1193ProviderRequestFunc, blockTag?: BlockTag): Promise<string | null>
+detectProxy(address: `0x${string}`, jsonRpcRequest: EIP1193ProviderRequestFunc, blockTag?: BlockTag): Promise<Result | null>
 ```
 
 **Arguments**
 
-- `address` (string): The address of the proxy contract
-- `jsonRpcRequest` (EIP1193ProviderRequestFunc): A JSON-RPC request function, compatible with [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) (`(method: string, params: any[]) => Promise<any>`)
+- `address`: The address of the proxy contract
+- `jsonRpcRequest`: A JSON-RPC request function, compatible with [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) (`(method: string, params: any[]) => Promise<any>`)
 - `blockTag` (optional: BlockTag): `"earliest"`, `"latest"`, `"pending"` or hex block number, default is `"latest"`
 
-The function returns a promise that will generally resolve to either the detected target contract address (non-checksummed) or `null` if it couldn't detect one.
+**Return value**
+
+The function returns a promise that will generally resolve to either a `Result` object describing the detected proxy or `null` if it couldn't detect one.
+
+```ts
+interface Result {
+  address: `0x${string}`
+  immutable: boolean
+  type: ProxyType
+}
+```
+
+- `address`: The address (non-checksummed) of the proxy target
+- `immutable`: Indicates if the proxy is immutable, meaning that the target address will never change
+- `type`: Identifies the detected proxy type (possible values shown below)
+
+```ts
+enum ProxyType {
+  Eip1167 = 'Eip1167',
+  Eip1967Direct = 'Eip1967Direct',
+  Eip1967Beacon = 'Eip1967Beacon',
+  Eip1822 = 'Eip1822',
+  Eip897 = 'Eip897',
+  OpenZeppelin = 'OpenZeppelin',
+  Safe = 'Safe',
+  Comptroller = 'Comptroller',
+}
+```

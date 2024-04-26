@@ -1,8 +1,8 @@
 import { InfuraProvider } from '@ethersproject/providers'
 import { EIP1193ProviderRequestFunc } from '../src/types'
-import detectProxyTarget from '../src'
+import detectProxy from '../src'
 
-describe('detectProxyTarget -> eip1193 provider', () => {
+describe('detectProxy -> eip1193 provider', () => {
   const infuraProvider = new InfuraProvider(1, process.env.INFURA_API_KEY)
   const requestFunc: EIP1193ProviderRequestFunc = ({ method, params }) =>
     infuraProvider.send(method, params)
@@ -12,7 +12,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-1967 direct proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
         requestFunc,
         BLOCK_TAG
@@ -22,7 +22,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-1967 beacon proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0xDd4e2eb37268B047f55fC5cAf22837F9EC08A881',
         requestFunc,
         BLOCK_TAG
@@ -32,7 +32,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-1967 beacon variant proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x114f1388fAB456c4bA31B1850b244Eedcd024136',
         requestFunc,
         BLOCK_TAG
@@ -42,7 +42,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects OpenZeppelin proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0xed7e6720Ac8525Ac1AEee710f08789D02cD87ecB',
         requestFunc,
         BLOCK_TAG
@@ -52,7 +52,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-897 delegate proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x8260b9eC6d472a34AD081297794d7Cc00181360a',
         requestFunc,
         BLOCK_TAG
@@ -62,7 +62,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-1167 minimal proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x6d5d9b6ec51c15f45bfa4c460502403351d5b999',
         requestFunc,
         BLOCK_TAG
@@ -72,7 +72,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects EIP-1167 minimal proxies with vanity addresses', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0xa81043fd06D57D140f6ad8C2913DbE87fdecDd5F',
         requestFunc,
         BLOCK_TAG
@@ -82,7 +82,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('detects Gnosis Safe proxies', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x0DA0C3e52C977Ed3cBc641fF02DD271c3ED55aFe',
         requestFunc,
         BLOCK_TAG
@@ -92,7 +92,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it("detects Compound's custom proxy", async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B',
         requestFunc,
         BLOCK_TAG
@@ -102,7 +102,7 @@ describe('detectProxyTarget -> eip1193 provider', () => {
 
   it('resolves to null if no proxy target is detected', async () => {
     expect(
-      await detectProxyTarget(
+      await detectProxy(
         '0x5864c777697Bf9881220328BF2f16908c9aFCD7e',
         requestFunc,
         BLOCK_TAG
