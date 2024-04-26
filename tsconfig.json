@@ -31,8 +31,8 @@
     "listFiles": false /* Print names of files part of the compilation. */,
     "pretty": true /* Stylize errors and messages using color and context. */,
 
-    "lib": ["es2021"],
-    "types": ["jest"]
+    "types": ["jest", "node"],
+    "lib": ["es2021"]
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "compileOnSave": false
