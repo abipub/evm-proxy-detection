@@ -32,10 +32,8 @@
     "pretty": true /* Stylize errors and messages using color and context. */,
 
     "lib": ["es2021"],
-    "types": ["jest"],
-    "typeRoots": ["node_modules/@types"]
+    "types": ["jest"]
   },
-  "files": ["src/index.ts"],
-  "include": ["src/**/*.ts", "test/**/*.ts", "hardhat.config.ts", "typechain"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "compileOnSave": false
 }
