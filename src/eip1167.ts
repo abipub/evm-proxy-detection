@@ -1,7 +1,7 @@
 const EIP_1167_BYTECODE_PREFIX = '0x363d3d373d3d3d363d'
 const EIP_1167_BYTECODE_SUFFIX = '57fd5bf3'
 
-export const parse1167Bytecode = (bytecode: unknown): string => {
+export const parse1167Bytecode = (bytecode: unknown): `0x${string}` => {
   if (
     typeof bytecode !== 'string' ||
     !bytecode.startsWith(EIP_1167_BYTECODE_PREFIX)
