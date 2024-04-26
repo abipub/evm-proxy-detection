@@ -43,7 +43,7 @@ const client = createPublicClient({
 })
 
 const result = await detectProxy(address, client.request)
-// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'Eip1967', immutable: false }
 ```
 
 ### Ethers with an adapter function
@@ -60,7 +60,7 @@ const target = await detectProxy(
   requestFunc
 )
 console.log(target)
-// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'Eip1967', immutable: false }
 ```
 
 ### Web3 with an EIP1193 provider
@@ -79,7 +79,7 @@ const result = await detectProxy(
   web3.currentProvider.request
 )
 console.log(result)
-// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'Eip1967', immutable: false }
 ```
 
 ## API
