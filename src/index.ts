@@ -225,3 +225,5 @@ const readAddress = (value: unknown) => {
 }
 
 export default detectProxy
+
+export { parse1167Bytecode }
