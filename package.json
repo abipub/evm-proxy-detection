@@ -1,9 +1,9 @@
 {
   "name": "evm-proxy-detection",
   "version": "2.0.0",
-  "description": "Detect proxy contracts and their target addresses using en EIP-1193 compatible JSON-RPC request function",
-  "repository": "git@github.com:gnosis/ethers-proxies.git",
-  "author": "Jan-Felix <jan-felix.schwarz@gnosis.io>",
+  "description": "Detect proxy contracts and their target addresses using an EIP-1193 compatible JSON-RPC request function",
+  "repository": "https://github.com/abipub/evm-proxy-detection.git",
+  "author": "Jan-Felix <jfschwarz@users.noreply.github.com>",
   "license": "MIT",
   "main": "build/cjs/index.js",
   "typings": "build/cjs/index.d.ts",

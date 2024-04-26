@@ -1,8 +1,7 @@
 # evm-proxy-detection
 
-Detect proxy contracts and their target addresses using an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible JSON-RPC `request` function. zero dependencies
+A zero dependencies module to detect proxy contracts and their target addresses using an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible JSON-RPC `request` function.
 
-This package offers a utility function for checking if a smart contract at a given address implements one of the known proxy patterns.
 It detects the following kinds of proxies:
 
 - [EIP-1167](https://eips.ethereum.org/EIPS/eip-1167) Minimal Proxy Contract
@@ -29,8 +28,23 @@ yarn add evm-proxy-detection
 ## How to use
 
 The function requires an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible `request` function that it uses to make JSON-RPC requests to run a set of checks against the given address.
-It returns a promise that resolves to the proxy target address, i.e., the address of the contract implementing the logic.
+It returns a promise that resolves to result object with the proxy target address, i.e., the address of the contract implementing the logic, and information about the detected proxy type.
 The promise resolves to `null` if no proxy can be detected.
+
+### Viem
+
+```ts
+import { createPublicClient, http } from 'viem'
+
+const client = createPublicClient({
+  chain,
+  // enable json-rpc batching to reduce the number of http requests
+  transport: http(undefined, { batch: true }),
+})
+
+const result = await detectProxy(address, client.request)
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
+```
 
 ### Ethers with an adapter function
 
@@ -45,7 +59,8 @@ const target = await detectProxy(
   '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
   requestFunc
 )
-console.log(target) // logs "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0"
+console.log(target)
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
 ```
 
 ### Web3 with an EIP1193 provider
@@ -59,11 +74,12 @@ import detectProxy from 'evm-proxy-detection'
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545')
 
-const target = await detectProxy(
+const result = await detectProxy(
   '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
   web3.currentProvider.request
 )
-console.log(target) // logs "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0"
+console.log(result)
+// logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'EIP-1967', immutable: false }
 ```
 
 ## API
@@ -84,13 +100,13 @@ The function returns a promise that will generally resolve to either a `Result` 
 
 ```ts
 interface Result {
-  address: `0x${string}`
+  target: `0x${string}`
   immutable: boolean
   type: ProxyType
 }
 ```
 
-- `address`: The address (non-checksummed) of the proxy target
+- `target`: The address (non-checksummed) of the proxy target
 - `immutable`: Indicates if the proxy is immutable, meaning that the target address will never change
 - `type`: Identifies the detected proxy type (possible values shown below)
 
