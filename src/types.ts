@@ -10,7 +10,7 @@ export enum ProxyType {
 }
 
 export interface Result {
-  address: `0x${string}`
+  target: `0x${string}`
   type: ProxyType
   immutable: boolean
 }

@@ -18,7 +18,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0x4bd844f72a8edd323056130a86fc624d0dbcf5b0',
+      target: '0x4bd844f72a8edd323056130a86fc624d0dbcf5b0',
       immutable: false,
       type: 'Eip1967Direct',
     })
@@ -32,7 +32,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0xe5c048792dcf2e4a56000c8b6a47f21df22752d1',
+      target: '0xe5c048792dcf2e4a56000c8b6a47f21df22752d1',
       immutable: false,
       type: 'Eip1967Beacon',
     })
@@ -46,7 +46,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0x0fa0fd98727c443dd5275774c44d27cff9d279ed',
+      target: '0x0fa0fd98727c443dd5275774c44d27cff9d279ed',
       immutable: false,
       type: 'Eip1967Beacon',
     })
@@ -60,7 +60,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0x0656368c4934e56071056da375d4a691d22161f8',
+      target: '0x0656368c4934e56071056da375d4a691d22161f8',
       immutable: false,
       type: 'OpenZeppelin',
     })
@@ -74,7 +74,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0xe4e4003afe3765aca8149a82fc064c0b125b9e5a',
+      target: '0xe4e4003afe3765aca8149a82fc064c0b125b9e5a',
       immutable: false,
       type: 'Eip1967Direct',
     })
@@ -88,7 +88,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0x210ff9ced719e9bf2444dbc3670bac99342126fa',
+      target: '0x210ff9ced719e9bf2444dbc3670bac99342126fa',
       immutable: true,
       type: 'Eip1167',
     })
@@ -102,7 +102,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0x0000000010fd301be3200e67978e3cc67c962f48',
+      target: '0x0000000010fd301be3200e67978e3cc67c962f48',
       immutable: true,
       type: 'Eip1167',
     })
@@ -116,7 +116,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0xd9db270c1b5e3bd161e8c8503c55ceabee709552',
+      target: '0xd9db270c1b5e3bd161e8c8503c55ceabee709552',
       immutable: false,
       type: 'Safe',
     })
@@ -130,7 +130,7 @@ describe('detectProxy', () => {
         BLOCK_TAG
       )
     ).toEqual({
-      address: '0xbafe01ff935c7305907c33bf824352ee5979b526',
+      target: '0xbafe01ff935c7305907c33bf824352ee5979b526',
       immutable: false,
       type: 'Comptroller',
     })
