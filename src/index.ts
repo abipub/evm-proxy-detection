@@ -61,8 +61,8 @@ const detectProxy = (
     })
       .then(parse1167Bytecode)
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Eip1167,
         immutable: true,
       })),
@@ -73,8 +73,8 @@ const detectProxy = (
       params: [proxyAddress, EIP_1967_LOGIC_SLOT, blockTag],
     })
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Eip1967Direct,
         immutable: false,
       })),
@@ -109,8 +109,8 @@ const detectProxy = (
         )
       )
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Eip1967Beacon,
         immutable: false,
       })),
@@ -121,8 +121,8 @@ const detectProxy = (
       params: [proxyAddress, OPEN_ZEPPELIN_IMPLEMENTATION_SLOT, blockTag],
     })
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.OpenZeppelin,
         immutable: false,
       })),
@@ -133,8 +133,8 @@ const detectProxy = (
       params: [proxyAddress, EIP_1822_LOGIC_SLOT, blockTag],
     })
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Eip1822,
         immutable: false,
       })),
@@ -151,8 +151,8 @@ const detectProxy = (
       ],
     })
       .then(readAddress)
-      .then(async (address) => ({
-        address,
+      .then(async (target) => ({
+        target,
         type: ProxyType.Eip897,
         // proxyType === 1 means that the proxy is immutable
         immutable:
@@ -181,8 +181,8 @@ const detectProxy = (
       ],
     })
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Safe,
         immutable: false,
       })),
@@ -199,8 +199,8 @@ const detectProxy = (
       ],
     })
       .then(readAddress)
-      .then((address) => ({
-        address,
+      .then((target) => ({
+        target,
         type: ProxyType.Comptroller,
         immutable: false,
       })),
