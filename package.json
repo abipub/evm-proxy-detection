@@ -1,6 +1,6 @@
 {
   "name": "evm-proxy-detection",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Detect proxy contracts and their target addresses using an EIP-1193 compatible JSON-RPC request function",
   "repository": "https://github.com/abipub/evm-proxy-detection.git",
   "author": "Jan-Felix <jfschwarz@users.noreply.github.com>",
