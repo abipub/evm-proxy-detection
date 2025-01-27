@@ -8,6 +8,14 @@
   "main": "build/cjs/index.js",
   "typings": "build/cjs/index.d.ts",
   "module": "build/esm/index.js",
+  "exports": {
+    ".": {
+      "types": "./build/cjs/index.d.ts",
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
+    }
+  },
+  "type": "module",
   "files": [
     "build",
     "LICENSE",
