@@ -136,6 +136,20 @@ describe('detectProxy', () => {
     })
   })
 
+  it("detects Balancer's BatchRelayer", async () => {
+    expect(
+      await detectProxy(
+        '0x35cea9e57a393ac66aaa7e25c391d52c74b5648f',
+        requestFunc,
+        BLOCK_TAG
+      )
+    ).toEqual({
+      target: '0xea66501df1a00261e3bb79d1e90444fc6a186b62',
+      immutable: true,
+      type: 'BatchRelayer',
+    })
+  })
+
   it('resolves to null if no proxy target is detected', async () => {
     expect(
       await detectProxy(

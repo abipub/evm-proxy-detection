@@ -7,6 +7,7 @@ export enum ProxyType {
   OpenZeppelin = 'OpenZeppelin',
   Safe = 'Safe',
   Comptroller = 'Comptroller',
+  BatchRelayer = 'BatchRelayer',
 }
 
 export interface Result {
