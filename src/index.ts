@@ -1,4 +1,5 @@
 import { parse1167Bytecode } from './eip1167'
+import { readString } from './readString'
 import {
   BlockTag,
   EIP1193ProviderRequestFunc,
@@ -46,6 +47,13 @@ const SAFE_PROXY_INTERFACE = [
 const COMPTROLLER_PROXY_INTERFACE = [
   // bytes4(keccak256("comptrollerImplementation()")) padded to 32 bytes
   '0xbb82aa5e00000000000000000000000000000000000000000000000000000000',
+]
+
+const BATCH_RELAYER_INTERFACE = [
+  // bytes4(keccak256("version()")) padded to 32 bytes
+  '0x54fd4d5000000000000000000000000000000000000000000000000000000000',
+  // bytes4(keccak256("getLibrary()")) padded to 32 bytes
+  '0x7678922e00000000000000000000000000000000000000000000000000000000',
 ]
 
 const detectProxy = (
@@ -204,6 +212,34 @@ const detectProxy = (
         type: ProxyType.Comptroller,
         immutable: false,
       })),
+
+    /// Balancer BatchRelayer
+    jsonRpcRequest({
+      method: 'eth_call',
+      params: [
+        { to: proxyAddress, data: BATCH_RELAYER_INTERFACE[0] },
+        blockTag,
+      ],
+    })
+      .then(readJsonString)
+      .then((json) => {
+        if (json.name === 'BatchRelayer') {
+          return jsonRpcRequest({
+            method: 'eth_call',
+            params: [
+              { to: proxyAddress, data: BATCH_RELAYER_INTERFACE[1] },
+              blockTag,
+            ],
+          })
+        }
+        throw new Error('Not a BatchRelayer')
+      })
+      .then(readAddress)
+      .then((target) => ({
+        target,
+        type: ProxyType.BatchRelayer,
+        immutable: true,
+      })),
   ]).catch(() => null)
 
 const zeroAddress = '0x' + '0'.repeat(40)
@@ -222,6 +258,13 @@ const readAddress = (value: unknown) => {
   }
 
   return address as `0x${string}`
+}
+
+const readJsonString = (value: unknown) => {
+  if (typeof value !== 'string') {
+    throw new Error(`Invalid hex string value: ${value}`)
+  }
+  return JSON.parse(readString(value as string))
 }
 
 export default detectProxy
