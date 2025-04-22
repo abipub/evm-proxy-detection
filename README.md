@@ -10,6 +10,7 @@ It detects the following kinds of proxies:
 - [EIP-1822](https://eips.ethereum.org/EIPS/eip-1822) Universal Upgradeable Proxy Standard
 - OpenZeppelin Proxy Pattern
 - Safe Proxy Contract
+- Additional custom proxies: Compound's Comptroller, Balancer's BatchRelayer
 
 ## Installation
 
@@ -120,5 +121,6 @@ enum ProxyType {
   OpenZeppelin = 'OpenZeppelin',
   Safe = 'Safe',
   Comptroller = 'Comptroller',
+  BatchRelayer = 'BatchRelayer',
 }
 ```
