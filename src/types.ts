@@ -4,17 +4,26 @@ export enum ProxyType {
   Eip1967Beacon = 'Eip1967Beacon',
   Eip1822 = 'Eip1822',
   Eip897 = 'Eip897',
+  Eip2535Diamond = 'Eip2535Diamond',
   OpenZeppelin = 'OpenZeppelin',
   Safe = 'Safe',
   Comptroller = 'Comptroller',
   BatchRelayer = 'BatchRelayer',
 }
 
-export interface Result {
+interface SingleResult {
   target: `0x${string}`
-  type: ProxyType
+  type: Exclude<ProxyType, ProxyType.Eip2535Diamond>
   immutable: boolean
 }
+
+interface DiamondResult {
+  target: `0x${string}`[]
+  type: ProxyType.Eip2535Diamond
+  immutable: false
+}
+
+export type Result = SingleResult | DiamondResult
 
 export type BlockTag = number | 'earliest' | 'latest' | 'pending'
 

@@ -56,6 +56,11 @@ const BATCH_RELAYER_INTERFACE = [
   '0x7678922e00000000000000000000000000000000000000000000000000000000',
 ]
 
+const EIP_2535_DIAMOND_LOUPE_INTERFACE = [
+  // bytes4(keccak256("facetAddresses()")) padded to 32 bytes
+  '0x52ef6b2c00000000000000000000000000000000000000000000000000000000',
+]
+
 const detectProxy = (
   proxyAddress: `0x${string}`,
   jsonRpcRequest: EIP1193ProviderRequestFunc,
@@ -71,7 +76,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Eip1167,
+        type: ProxyType.Eip1167 as const,
         immutable: true,
       })),
 
@@ -83,7 +88,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Eip1967Direct,
+        type: ProxyType.Eip1967Direct as const,
         immutable: false,
       })),
 
@@ -119,7 +124,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Eip1967Beacon,
+        type: ProxyType.Eip1967Beacon as const,
         immutable: false,
       })),
 
@@ -131,7 +136,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.OpenZeppelin,
+        type: ProxyType.OpenZeppelin as const,
         immutable: false,
       })),
 
@@ -143,7 +148,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Eip1822,
+        type: ProxyType.Eip1822 as const,
         immutable: false,
       })),
 
@@ -161,7 +166,7 @@ const detectProxy = (
       .then(readAddress)
       .then(async (target) => ({
         target,
-        type: ProxyType.Eip897,
+        type: ProxyType.Eip897 as const,
         // proxyType === 1 means that the proxy is immutable
         immutable:
           (await jsonRpcRequest({
@@ -191,7 +196,7 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Safe,
+        type: ProxyType.Safe as const,
         immutable: false,
       })),
 
@@ -209,11 +214,11 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.Comptroller,
+        type: ProxyType.Comptroller as const,
         immutable: false,
       })),
 
-    /// Balancer BatchRelayer
+    // Balancer BatchRelayer
     jsonRpcRequest({
       method: 'eth_call',
       params: [
@@ -237,8 +242,26 @@ const detectProxy = (
       .then(readAddress)
       .then((target) => ({
         target,
-        type: ProxyType.BatchRelayer,
+        type: ProxyType.BatchRelayer as const,
         immutable: true,
+      })),
+
+    // EIP-2535 Diamond proxy
+    jsonRpcRequest({
+      method: 'eth_call',
+      params: [
+        {
+          to: proxyAddress,
+          data: EIP_2535_DIAMOND_LOUPE_INTERFACE[0],
+        },
+        blockTag,
+      ],
+    })
+      .then(readAddressArray)
+      .then((target) => ({
+        target,
+        type: ProxyType.Eip2535Diamond as const,
+        immutable: false as const,
       })),
   ]).catch(() => null)
 
@@ -258,6 +281,50 @@ const readAddress = (value: unknown) => {
   }
 
   return address as `0x${string}`
+}
+
+const readAddressArray = (value: unknown) => {
+  if (typeof value !== 'string' || !value.startsWith('0x')) {
+    throw new Error(`Invalid hex-encoded value: ${value}`)
+  }
+
+  const hex = value.slice(2)
+  if (hex.length < 64) {
+    throw new Error('Insufficient data for address[]')
+  }
+
+  const offsetBytes = BigInt('0x' + hex.slice(0, 64))
+  const offset = Number(offsetBytes) * 2 // hex chars per byte
+  if (!Number.isFinite(offset) || offset < 0 || hex.length < offset + 64) {
+    throw new Error('Invalid dynamic offset for address[]')
+  }
+
+  const length = Number(BigInt('0x' + hex.slice(offset, offset + 64)))
+  if (!Number.isFinite(length) || length < 0) {
+    throw new Error('Invalid address[] length')
+  }
+
+  const addresses: `0x${string}`[] = []
+  let cursor = offset + 64 // start of first element
+  const needed = cursor + length * 64
+  if (hex.length < needed) {
+    throw new Error('Truncated address[] data')
+  }
+
+  for (let i = 0; i < length; i++) {
+    const word = hex.slice(cursor, cursor + 64)
+    cursor += 64
+    const addressHex = '0x' + word.slice(24)
+    if (addressHex !== zeroAddress) {
+      addresses.push(addressHex as `0x${string}`)
+    }
+  }
+
+  if (addresses.length === 0) {
+    throw new Error('Empty address[]')
+  }
+
+  return addresses
 }
 
 const readJsonString = (value: unknown) => {
