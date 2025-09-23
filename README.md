@@ -8,6 +8,7 @@ It detects the following kinds of proxies:
 - [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967) Transparent Proxy Pattern
 - [EIP-897](https://eips.ethereum.org/EIPS/eip-897) Delegate Proxy Pattern
 - [EIP-1822](https://eips.ethereum.org/EIPS/eip-1822) Universal Upgradeable Proxy Standard
+- [EIP-2535](https://eips.ethereum.org/EIPS/eip-2535) Diamonds, Multi-Facet Proxy
 - OpenZeppelin Proxy Pattern
 - Safe Proxy Contract
 - Additional custom proxies: Compound's Comptroller, Balancer's BatchRelayer
@@ -43,7 +44,10 @@ const client = createPublicClient({
   transport: http(undefined, { batch: true }),
 })
 
-const result = await detectProxy(address, client.request)
+const result = await detectProxy(
+  '0xA7AeFeaD2F25972D80516628417ac46b3F2604Af',
+  client.request
+)
 // logs: { target: "0x4bd844F72A8edD323056130A86FC624D0dbcF5b0", type: 'Eip1967', immutable: false }
 ```
 
@@ -105,9 +109,16 @@ interface Result {
   immutable: boolean
   type: ProxyType
 }
+
+// In case a diamond proxy is detected, the `target` field will be an array of addresses
+interface DiamondResult {
+  target: `0x${string}`[]
+  immutable: false
+  type: ProxyType.Eip2535Diamond
+}
 ```
 
-- `target`: The address (non-checksummed) of the proxy target
+- `target`: The address (non-checksummed) of the proxy target. An array of facet addresses for `type: ProxyType.Eip2535Diamond`.
 - `immutable`: Indicates if the proxy is immutable, meaning that the target address will never change
 - `type`: Identifies the detected proxy type (possible values shown below)
 
@@ -117,6 +128,7 @@ enum ProxyType {
   Eip1967Direct = 'Eip1967Direct',
   Eip1967Beacon = 'Eip1967Beacon',
   Eip1822 = 'Eip1822',
+  Eip2535Diamond = 'Eip2535Diamond',
   Eip897 = 'Eip897',
   OpenZeppelin = 'OpenZeppelin',
   Safe = 'Safe',
